@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}교수 대시보드{% endblock %}
+
+{% block content %}
+<h2>👨‍🏫 교수 대시보드</h2>
+<hr>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>내 정보</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <th width="30%">이름:</th>
+                        <td>{{ professor.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>교번:</th>
+                        <td>{{ professor.professor_id }}</td>
+                    </tr>
+                    <tr>
+                        <th>소속:</th>
+                        <td>{{ professor.department }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5>담당 강좌 현황</h5>
+            </div>
+            <div class="card-body">
+                <h3 class="text-center">총 <span class="text-primary">{{ courses|length }}</span>개 강좌</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>담당 강좌 목록</h5>
+            </div>
+            <div class="card-body">
+                {% if courses %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>과목코드</th>
+                            <th>과목명</th>
+                            <th>학점</th>
+                            <th>수강생 수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                        <tr>
+                            <td>{{ course.id }}</td>
+                            <td>{{ course.title }}</td>
+                            <td>{{ course.credits }}</td>
+                            <td>{{ course.students }}명</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="alert alert-info">담당 중인 강좌가 없습니다.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>빠른 메뉴</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="{{ url_for('professor_courses') }}" class="btn btn-primary w-100 mb-2">
+                            📚 담당 강좌 관리
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{{ url_for('professor_grades') }}" class="btn btn-success w-100 mb-2">
+                            📝 성적 입력
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{{ url_for('notices') }}" class="btn btn-warning w-100 mb-2">
+                            📢 공지사항
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

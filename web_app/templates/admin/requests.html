@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}학적 변동 관리{% endblock %}
+
+{% block content %}
+<h2>📋 학적 변동 신청 관리</h2>
+<hr>
+
+<div class="card">
+    <div class="card-header">
+        <h5>승인 대기 목록</h5>
+    </div>
+    <div class="card-body">
+        {% if requests %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>신청 ID</th>
+                    <th>학생명</th>
+                    <th>학생 ID</th>
+                    <th>신청 유형</th>
+                    <th>사유</th>
+                    <th>처리</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req.req_id }}</td>
+                    <td>{{ req.student_name }}</td>
+                    <td>{{ req.student_user_id }}</td>
+                    <td><span class="badge bg-info">{{ req.type }}</span></td>
+                    <td>{{ req.reason }}</td>
+                    <td>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="req_id" value="{{ req.req_id }}">
+                            <input type="hidden" name="action" value="approve">
+                            <button type="submit" class="btn btn-sm btn-success" 
+                                    onclick="return confirm('승인하시겠습니까?');">
+                                승인
+                            </button>
+                        </form>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="req_id" value="{{ req.req_id }}">
+                            <input type="hidden" name="action" value="reject">
+                            <button type="submit" class="btn btn-sm btn-danger" 
+                                    onclick="return confirm('반려하시겠습니까?');">
+                                반려
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">대기 중인 학적 변동 신청이 없습니다.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

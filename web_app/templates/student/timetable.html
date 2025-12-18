@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}시간표{% endblock %}
+
+{% block content %}
+<h2>📅 내 시간표/수강과목</h2>
+<hr>
+
+<div class="card">
+    <div class="card-header">
+        <h5>수강 중인 과목</h5>
+    </div>
+    <div class="card-body">
+        {% if courses %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>과목코드</th>
+                    <th>과목명</th>
+                    <th>담당교수</th>
+                    <th>학점</th>
+                    <th>시간</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td>{{ course.id }}</td>
+                    <td>{{ course.title }}</td>
+                    <td>{{ course.professor }}</td>
+                    <td>{{ course.credits }}</td>
+                    <td>{{ course.time }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('student_drop', course_id=course.id) }}" 
+                              onsubmit="return confirm('정말로 이 과목을 수강 취소하시겠습니까?');">
+                            <button type="submit" class="btn btn-sm btn-danger">수강취소</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="mt-3">
+            <p><strong>총 {{ courses|length }}개 과목</strong></p>
+        </div>
+        {% else %}
+        <div class="alert alert-info">수강 중인 과목이 없습니다.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

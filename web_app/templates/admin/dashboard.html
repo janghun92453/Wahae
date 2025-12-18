@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}관리자 대시보드{% endblock %}
+
+{% block content %}
+<h2>🧑‍💼 관리자 대시보드</h2>
+<hr>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h1 class="text-primary">{{ stats.students }}</h1>
+                <p class="card-text">학생</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h1 class="text-success">{{ stats.professors }}</h1>
+                <p class="card-text">교수</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h1 class="text-info">{{ stats.courses }}</h1>
+                <p class="card-text">강좌</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h1 class="text-warning">{{ stats.pending_requests }}</h1>
+                <p class="card-text">대기 중인 학적 변동</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>관리 메뉴</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="{{ url_for('admin_courses') }}" class="btn btn-primary w-100 mb-2">
+                            📚 강좌 관리
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('admin_users') }}" class="btn btn-success w-100 mb-2">
+                            👥 사용자 관리
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('admin_notices') }}" class="btn btn-info w-100 mb-2">
+                            📢 공지사항 관리
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('admin_requests') }}" class="btn btn-warning w-100 mb-2">
+                            📋 학적 변동 관리
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -124,6 +124,84 @@ pyinstaller로 Exe 파일로 실행
 
 ## 📅 7,8주차 기말프로젝트 종료 (1211~1219)
 
+---
+
+# 🌐 웹 버전 (Flask 기반)
+
+기존 콘솔 기반 시스템을 웹 애플리케이션으로 확장했습니다!
+
+## 🚀 웹 버전 실행 방법
+
+```bash
+# 1. web_app 디렉토리로 이동
+cd web_app
+
+# 2. 필요한 패키지 설치
+pip install -r requirements.txt
+
+# 3. Flask 애플리케이션 실행
+python app.py
+
+# 4. 브라우저에서 접속
+# http://localhost:5000
+```
+
+### ⚠️ 보안 주의사항 (프로덕션 배포 시)
+
+개발 환경에서는 기본 설정으로 사용 가능하지만, **프로덕션 환경**에서는 다음 사항을 반드시 변경해야 합니다:
+
+1. **비밀 키 설정**: 환경 변수 `SECRET_KEY`를 설정하세요
+   ```bash
+   export SECRET_KEY='your-secure-random-secret-key'
+   ```
+
+2. **디버그 모드 비활성화**: 환경 변수 `FLASK_DEBUG`를 `False`로 설정하세요
+   ```bash
+   export FLASK_DEBUG=False
+   ```
+
+3. **프로덕션 서버 사용**: 개발 서버 대신 Gunicorn, uWSGI 등 사용
+   ```bash
+   pip install gunicorn
+   gunicorn -w 4 -b 0.0.0.0:5000 app:app
+   ```
+
+4. **HTTPS 사용**: SSL/TLS 인증서를 사용하여 암호화된 통신 설정
+
+## 🔐 테스트 계정
+
+- **학생**: `student1` / `1234`
+- **교수**: `prof1` / `1234`
+- **관리자**: `admin1` / `1234`
+
+## ✨ 웹 버전 주요 기능
+
+### 👨‍🎓 학생
+- 수강 신청/취소 (시간 충돌 감지)
+- 시간표 조회
+- 성적 조회 (GPA 자동 계산)
+- 공지사항 확인
+
+### 👨‍🏫 교수
+- 담당 강좌 관리
+- 수강생 명단 확인
+- 성적 입력/수정
+
+### 🧑‍💼 관리자
+- 강좌 개설/삭제
+- 사용자 계정 관리 (추가/삭제/비밀번호 초기화)
+- 공지사항 관리
+- 학적 변동 신청 처리
+
+## 🛠️ 기술 스택
+
+- **Backend**: Flask (Python)
+- **Frontend**: HTML, CSS (Bootstrap 5), JavaScript
+- **Data Storage**: JSON 파일
+- **Session Management**: Flask Session
+
+---
+
 ## 성능 · 테스트(시간부족으로 인해 미진행)
 
 프로젝트 특성상 다음처럼 테스트 가능:
