@@ -1,0 +1,16 @@
+{
+    "student1": {
+        "name": "김학생",
+        "student_id": "20240001",
+        "major": "컴퓨터공학과",
+        "courses": [],
+        "status": "재학"
+    },
+    "student2": {
+        "name": "이학생",
+        "student_id": "20240002",
+        "major": "소프트웨어학과",
+        "courses": [],
+        "status": "재학"
+    }
+}

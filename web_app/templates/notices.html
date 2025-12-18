@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}공지사항{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>📢 공지사항</h2>
+        <hr>
+        
+        {% if notices %}
+            {% for notice in notices %}
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between">
+                    <strong>{{ notice.title }}</strong>
+                    <small class="text-muted">작성자: {{ notice.author }}</small>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ notice.content }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">등록된 공지사항이 없습니다.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

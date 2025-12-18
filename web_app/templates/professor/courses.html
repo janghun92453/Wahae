@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}담당 강좌 관리{% endblock %}
+
+{% block content %}
+<h2>📚 담당 강좌 관리</h2>
+<hr>
+
+<div class="card">
+    <div class="card-header">
+        <h5>담당 강좌 목록</h5>
+    </div>
+    <div class="card-body">
+        {% if courses %}
+        {% for course in courses %}
+        <div class="card mb-3">
+            <div class="card-header bg-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">[{{ course.id }}] {{ course.title }}</h5>
+                    <a href="{{ url_for('professor_course_students', course_id=course.id) }}" 
+                       class="btn btn-sm btn-primary">
+                        수강생 목록 ({{ course.students }}명)
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>학점:</strong> {{ course.credits }}</p>
+                        <p><strong>시간:</strong> {{ course.time }}</p>
+                        <p><strong>수강생:</strong> {{ course.students }}명</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>강의 계획서:</strong></p>
+                        <p class="text-muted">{{ course.syllabus }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="alert alert-info">담당 중인 강좌가 없습니다.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}사용자 관리{% endblock %}
+
+{% block content %}
+<h2>👥 사용자 관리</h2>
+<hr>
+
+<!-- 사용자 추가 폼 -->
+<div class="card mb-3">
+    <div class="card-header bg-primary text-white">
+        <h5>사용자 계정 추가</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" id="addUserForm">
+            <input type="hidden" name="action" value="add">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">역할</label>
+                        <select name="role" id="roleSelect" class="form-select" required onchange="updateFormFields()">
+                            <option value="">선택하세요</option>
+                            <option value="student">학생</option>
+                            <option value="professor">교수</option>
+                            <option value="admin">관리자</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">아이디</label>
+                        <input type="text" name="user_id" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">비밀번호 (기본: 1234)</label>
+                        <input type="password" name="password" class="form-control" placeholder="1234">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label">이름</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-4" id="idNumberField">
+                    <div class="mb-3">
+                        <label class="form-label" id="idNumberLabel">학번/교번/직원번호</label>
+                        <input type="text" name="student_id" id="idNumberInput" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-4" id="deptField">
+                    <div class="mb-3">
+                        <label class="form-label" id="deptLabel">전공/학과/부서</label>
+                        <input type="text" name="major" id="deptInput" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">사용자 추가</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function updateFormFields() {
+    const role = document.getElementById('roleSelect').value;
+    const idNumberLabel = document.getElementById('idNumberLabel');
+    const idNumberInput = document.getElementById('idNumberInput');
+    const deptLabel = document.getElementById('deptLabel');
+    const deptInput = document.getElementById('deptInput');
+    
+    if (role === 'student') {
+        idNumberLabel.textContent = '학번';
+        idNumberInput.name = 'student_id';
+        deptLabel.textContent = '전공';
+        deptInput.name = 'major';
+    } else if (role === 'professor') {
+        idNumberLabel.textContent = '교번';
+        idNumberInput.name = 'professor_id';
+        deptLabel.textContent = '학과';
+        deptInput.name = 'department';
+    } else if (role === 'admin') {
+        idNumberLabel.textContent = '직원번호';
+        idNumberInput.name = 'admin_id';
+        deptLabel.textContent = '부서';
+        deptInput.name = 'department';
+    }
+}
+</script>
+
+<!-- 학생 목록 -->
+<div class="card mb-3">
+    <div class="card-header">
+        <h5>학생 목록</h5>
+    </div>
+    <div class="card-body">
+        {% if users.students %}
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>학번</th>
+                    <th>이름</th>
+                    <th>전공</th>
+                    <th>학적</th>
+                    <th>로그인 ID</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in users.students %}
+                <tr>
+                    <td>{{ student.id_number }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.major }}</td>
+                    <td><span class="badge bg-success">{{ student.status }}</span></td>
+                    <td>{{ student.user_id }}</td>
+                    <td>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="action" value="reset_password">
+                            <input type="hidden" name="reset_user_id" value="{{ student.user_id }}">
+                            <input type="hidden" name="new_password" value="1234">
+                            <button type="submit" class="btn btn-sm btn-warning" 
+                                    onclick="return confirm('비밀번호를 1234로 초기화하시겠습니까?');">
+                                초기화
+                            </button>
+                        </form>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="delete_user_id" value="{{ student.user_id }}">
+                            <button type="submit" class="btn btn-sm btn-danger" 
+                                    onclick="return confirm('정말로 삭제하시겠습니까?');">
+                                삭제
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">등록된 학생이 없습니다.</div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 교수 목록 -->
+<div class="card mb-3">
+    <div class="card-header">
+        <h5>교수 목록</h5>
+    </div>
+    <div class="card-body">
+        {% if users.professors %}
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>교번</th>
+                    <th>이름</th>
+                    <th>학과</th>
+                    <th>로그인 ID</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prof in users.professors %}
+                <tr>
+                    <td>{{ prof.id_number }}</td>
+                    <td>{{ prof.name }}</td>
+                    <td>{{ prof.department }}</td>
+                    <td>{{ prof.user_id }}</td>
+                    <td>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="action" value="reset_password">
+                            <input type="hidden" name="reset_user_id" value="{{ prof.user_id }}">
+                            <input type="hidden" name="new_password" value="1234">
+                            <button type="submit" class="btn btn-sm btn-warning" 
+                                    onclick="return confirm('비밀번호를 1234로 초기화하시겠습니까?');">
+                                초기화
+                            </button>
+                        </form>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="delete_user_id" value="{{ prof.user_id }}">
+                            <button type="submit" class="btn btn-sm btn-danger" 
+                                    onclick="return confirm('정말로 삭제하시겠습니까?');">
+                                삭제
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">등록된 교수가 없습니다.</div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 관리자 목록 -->
+<div class="card">
+    <div class="card-header">
+        <h5>관리자 목록</h5>
+    </div>
+    <div class="card-body">
+        {% if users.admins %}
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>직원번호</th>
+                    <th>이름</th>
+                    <th>부서</th>
+                    <th>로그인 ID</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for admin in users.admins %}
+                <tr>
+                    <td>{{ admin.id_number }}</td>
+                    <td>{{ admin.name }}</td>
+                    <td>{{ admin.department }}</td>
+                    <td>{{ admin.user_id }}</td>
+                    <td>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="action" value="reset_password">
+                            <input type="hidden" name="reset_user_id" value="{{ admin.user_id }}">
+                            <input type="hidden" name="new_password" value="1234">
+                            <button type="submit" class="btn btn-sm btn-warning" 
+                                    onclick="return confirm('비밀번호를 1234로 초기화하시겠습니까?');">
+                                초기화
+                            </button>
+                        </form>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="delete_user_id" value="{{ admin.user_id }}">
+                            <button type="submit" class="btn btn-sm btn-danger" 
+                                    onclick="return confirm('정말로 삭제하시겠습니까?');">
+                                삭제
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">등록된 관리자가 없습니다.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

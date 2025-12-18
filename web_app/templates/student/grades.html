@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}성적조회{% endblock %}
+
+{% block content %}
+<h2>📊 성적 조회</h2>
+<hr>
+
+<div class="card mb-3">
+    <div class="card-header bg-primary text-white">
+        <h5>성적 요약</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>전체 평점 평균 (GPA): <span class="text-primary">{{ "%.2f"|format(gpa) }}</span> / 4.5</h4>
+            </div>
+            <div class="col-md-6">
+                <h4>총 이수 학점: <span class="text-success">{{ earned_credits }}</span> 학점</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>과목별 성적</h5>
+    </div>
+    <div class="card-body">
+        {% if grades %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>과목코드</th>
+                    <th>과목명</th>
+                    <th>학점</th>
+                    <th>성적 등급</th>
+                    <th>점수</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grade in grades %}
+                <tr>
+                    <td>{{ grade.id }}</td>
+                    <td>{{ grade.title }}</td>
+                    <td>{{ grade.credits }}</td>
+                    <td>
+                        <span class="badge 
+                            {% if grade.grade in ['A+', 'A0'] %}bg-success
+                            {% elif grade.grade in ['B+', 'B0'] %}bg-primary
+                            {% elif grade.grade in ['C+', 'C0'] %}bg-info
+                            {% elif grade.grade in ['D+', 'D0'] %}bg-warning
+                            {% else %}bg-danger
+                            {% endif %}">
+                            {{ grade.grade }}
+                        </span>
+                    </td>
+                    <td>{{ "%.1f"|format(grade.score) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">조회할 성적 정보가 없습니다.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

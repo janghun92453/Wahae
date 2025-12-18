@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}강좌 관리{% endblock %}
+
+{% block content %}
+<h2>📚 강좌 관리</h2>
+<hr>
+
+<!-- 강좌 개설 폼 -->
+<div class="card mb-3">
+    <div class="card-header bg-primary text-white">
+        <h5>강좌 개설</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <input type="hidden" name="action" value="create">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">과목코드</label>
+                        <input type="text" name="course_id" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">과목명</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">담당교수</label>
+                        <select name="professor" class="form-select" required>
+                            <option value="">선택하세요</option>
+                            {% for prof_id, prof in professors.items() %}
+                            <option value="{{ prof_id }}">{{ prof.name }} ({{ prof_id }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">학점</label>
+                        <input type="number" name="credits" class="form-control" step="0.5" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">최대 수강 인원</label>
+                        <input type="number" name="max_capacity" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">요일</label>
+                        <select name="day" class="form-select" required>
+                            <option value="월">월</option>
+                            <option value="화">화</option>
+                            <option value="수">수</option>
+                            <option value="목">목</option>
+                            <option value="금">금</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">시작 교시</label>
+                                <input type="number" name="start" class="form-control" min="1" max="24" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">종료 교시</label>
+                                <input type="number" name="end" class="form-control" min="1" max="24" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">강좌 개설</button>
+        </form>
+    </div>
+</div>
+
+<!-- 강좌 목록 -->
+<div class="card">
+    <div class="card-header">
+        <h5>개설 강좌 목록</h5>
+    </div>
+    <div class="card-body">
+        {% if courses %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>과목코드</th>
+                    <th>과목명</th>
+                    <th>담당교수</th>
+                    <th>학점</th>
+                    <th>시간</th>
+                    <th>정원</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td>{{ course.id }}</td>
+                    <td>{{ course.title }}</td>
+                    <td>{{ course.professor }}</td>
+                    <td>{{ course.credits }}</td>
+                    <td>{{ course.time }}</td>
+                    <td>{{ course.current }}/{{ course.max }}</td>
+                    <td>
+                        <form method="POST" style="display: inline;" 
+                              onsubmit="return confirm('정말로 이 강좌를 삭제하시겠습니까?');">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="delete_course_id" value="{{ course.id }}">
+                            <button type="submit" class="btn btn-sm btn-danger">삭제</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">개설된 강좌가 없습니다.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

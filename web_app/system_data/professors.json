@@ -1,0 +1,14 @@
+{
+    "prof1": {
+        "name": "박교수",
+        "professor_id": "P20240001",
+        "department": "컴퓨터공학과",
+        "courses_taught": []
+    },
+    "prof2": {
+        "name": "최교수",
+        "professor_id": "P20240002",
+        "department": "소프트웨어학과",
+        "courses_taught": []
+    }
+}

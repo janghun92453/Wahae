@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}학생 대시보드{% endblock %}
+
+{% block content %}
+<h2>👨‍🎓 학생 대시보드</h2>
+<hr>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>내 정보</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <th width="30%">이름:</th>
+                        <td>{{ student.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>학번:</th>
+                        <td>{{ student.student_id }}</td>
+                    </tr>
+                    <tr>
+                        <th>전공:</th>
+                        <td>{{ student.major }}</td>
+                    </tr>
+                    <tr>
+                        <th>학적:</th>
+                        <td><span class="badge bg-success">{{ student.status }}</span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5>학업 현황</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <th width="40%">평점 평균 (GPA):</th>
+                        <td><strong>{{ "%.2f"|format(gpa) }}</strong> / 4.5</td>
+                    </tr>
+                    <tr>
+                        <th>총 이수 학점:</th>
+                        <td><strong>{{ earned_credits }}</strong> 학점</td>
+                    </tr>
+                    <tr>
+                        <th>수강 중인 과목:</th>
+                        <td><strong>{{ student.courses|length }}</strong> 과목</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>빠른 메뉴</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="{{ url_for('student_register') }}" class="btn btn-primary w-100 mb-2">
+                            📝 수강신청
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('student_timetable') }}" class="btn btn-info w-100 mb-2">
+                            📅 시간표 조회
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('student_grades') }}" class="btn btn-success w-100 mb-2">
+                            📊 성적 조회
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('notices') }}" class="btn btn-warning w-100 mb-2">
+                            📢 공지사항
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}성적 입력{% endblock %}
+
+{% block content %}
+<h2>📝 성적 입력</h2>
+<hr>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5>강좌 선택</h5>
+    </div>
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-6">
+                <select name="course_id" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- 강좌를 선택하세요 --</option>
+                    {% for course in my_courses %}
+                    <option value="{{ course.id }}" {% if course.id == selected_course_id %}selected{% endif %}>
+                        [{{ course.id }}] {{ course.title }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if selected_course %}
+<div class="card">
+    <div class="card-header">
+        <h5>[{{ selected_course_id }}] {{ selected_course.title }} - 성적 입력</h5>
+    </div>
+    <div class="card-body">
+        {% if students %}
+        <form method="POST">
+            <input type="hidden" name="course_id" value="{{ selected_course_id }}">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>학번</th>
+                        <th>이름</th>
+                        <th>현재 성적</th>
+                        <th>성적 입력</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.student_id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>
+                            <span class="badge 
+                                {% if student.grade in ['A+', 'A0'] %}bg-success
+                                {% elif student.grade in ['B+', 'B0'] %}bg-primary
+                                {% elif student.grade in ['C+', 'C0'] %}bg-info
+                                {% elif student.grade in ['D+', 'D0'] %}bg-warning
+                                {% elif student.grade == 'F' %}bg-danger
+                                {% else %}bg-secondary
+                                {% endif %}">
+                                {{ student.grade }}
+                            </span>
+                        </td>
+                        <td>
+                            <select name="grade_{{ student.id }}" class="form-select form-select-sm">
+                                <option value="">선택</option>
+                                {% for grade in grade_options %}
+                                <option value="{{ grade }}" {% if grade == student.grade %}selected{% endif %}>
+                                    {{ grade }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">성적 저장</button>
+        </form>
+        {% else %}
+        <div class="alert alert-info">수강생이 없습니다.</div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
