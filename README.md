@@ -146,6 +146,28 @@ python app.py
 # http://localhost:5000
 ```
 
+### ⚠️ 보안 주의사항 (프로덕션 배포 시)
+
+개발 환경에서는 기본 설정으로 사용 가능하지만, **프로덕션 환경**에서는 다음 사항을 반드시 변경해야 합니다:
+
+1. **비밀 키 설정**: 환경 변수 `SECRET_KEY`를 설정하세요
+   ```bash
+   export SECRET_KEY='your-secure-random-secret-key'
+   ```
+
+2. **디버그 모드 비활성화**: 환경 변수 `FLASK_DEBUG`를 `False`로 설정하세요
+   ```bash
+   export FLASK_DEBUG=False
+   ```
+
+3. **프로덕션 서버 사용**: 개발 서버 대신 Gunicorn, uWSGI 등 사용
+   ```bash
+   pip install gunicorn
+   gunicorn -w 4 -b 0.0.0.0:5000 app:app
+   ```
+
+4. **HTTPS 사용**: SSL/TLS 인증서를 사용하여 암호화된 통신 설정
+
 ## 🔐 테스트 계정
 
 - **학생**: `student1` / `1234`

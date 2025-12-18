@@ -1,12 +1,14 @@
 # app.py
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+import os
 import data
 import common_module as common
 from datetime import datetime
 from functools import wraps
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-change-in-production'  # 프로덕션에서는 변경 필요
+# 프로덕션에서는 환경 변수에서 로드: os.environ.get('SECRET_KEY')
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
 # 데이터 로드
 common.load_all_data()
@@ -706,4 +708,6 @@ def admin_requests():
     return render_template('admin/requests.html', requests=pending_requests)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # 개발 환경: debug=True, 프로덕션 환경: debug=False로 설정
+    debug_mode = os.environ.get('FLASK_DEBUG', 'True') == 'True'
+    app.run(debug=debug_mode, host='0.0.0.0', port=5000)
